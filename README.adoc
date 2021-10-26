@@ -149,6 +149,9 @@ ingress.extensions/twitter-bot-ingress created
 $ kubectl get ingress
 NAME              CLASS    HOSTS   ADDRESS                                                                 PORTS   AGE
 twitterbot-ingress   <none>   *       58c8349a-default-twitterbotin-89de-245843308.us-east-2.elb.amazonaws.com   80      3d1h
+
+For issues with Loadbalancer creation, please verify proper tags are set on your VPC subnets:
+Please see https://aws.amazon.com/premiumsupport/knowledge-center/eks-vpc-subnet-discovery/
 ----
 
 
