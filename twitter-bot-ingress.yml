@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: "twitter-bot-ingress"
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=3600
+  labels:
+    app: twittertbot
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: "service-twitter-bot"
+              servicePort: 80

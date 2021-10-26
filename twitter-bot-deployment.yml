@@ -1,0 +1,45 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: twitterbot
+  namespace: default
+  labels:
+    app: twitterbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: twitterbot
+  template:
+    metadata:
+      labels:
+        app: twitterbot
+    spec:
+      containers:
+      - name: twitter-analytics-bot
+        image: bbertka/twitter-analytics-bot:latest
+        env:
+        - name: APP_KEY
+          value: "3eQgf4N2"
+        - name: APP_SECRET
+          value: "u8lsThvxadadewK8OZadLy1asdT04dSdCSaWxjLW"
+        - name: OAUTH_TOKEN
+          value: "2927712042-chamgadasdEbykFGY7KDCA9Hg1009875MK"
+        - name: OAUTH_TOKEN_SECRET
+          value: "eTAdn567756weryD125d67vwk56r7asdasdcJiL"
+        - name: MAX_CHART_SIZE
+          value: "5000"
+        - name: PROBABLE_RETWEET
+          value: "0"
+        - name: PROBABLE_FOLLOW
+          value: "0"
+        - name: PROBABLE_FAVORITE
+          value: "0"
+        - name: PROBABLE_DO_NOTHING
+          value: "100"
+        - name: PORT
+          value: "8080"
+        - name: INCLUDE_TWITTER_HASH
+          value: "bigdata"
+        ports:
+        - containerPort: 8080
