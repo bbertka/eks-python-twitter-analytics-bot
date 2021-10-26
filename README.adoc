@@ -7,7 +7,7 @@ image:img/twitter-bot.png[]
 * link:#part-1---requirements[Part 1 - Requirements]
 * link:#part-2---deploy-eks-cluster[Part 2 - Deploy EKS Cluster]
 * link:#part-3---setup-cluster-ingress[Part 3 - Setup Cluster Ingress]
-* link:#part-4---deploy-twitterbot[Part 4 - Deploy Bot]
+* link:#part-4---deploy-twitter-bot[Part 4 - Deploy Bot]
 
 == Assumptions
 * You already have an AWS account with typical permissions to create EC2 resources, EKS clusters
