@@ -148,17 +148,17 @@ ingress.extensions/twitter-bot-ingress created
 ----
 $ kubectl get ingress
 NAME              CLASS    HOSTS   ADDRESS                                                                 PORTS   AGE
-twitterbot-ingress   <none>   *       58c8349a-default-rundeckin-89de-245843308.us-east-2.elb.amazonaws.com   80      3d1h
+twitterbot-ingress   <none>   *       58c8349a-default-twitterbotin-89de-245843308.us-east-2.elb.amazonaws.com   80      3d1h
 ----
 
 
 [#deploy-twitterbot]
 = Part 4 - Deploy Twitter Bot
 
-. Deploy Twitter Bot
+. Deploy Twitter Bot (make sure to update your env vars)
 +
 ----
-$ kubectl apply -f twitterbot-deployment.yaml
+$ kubectl apply -f twitter-bot-deployment.yaml
 ----
 
 . If all goes well you should see output as such:
