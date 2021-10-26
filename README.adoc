@@ -216,5 +216,11 @@ $kubectl create namespace wavefront && helm install wavefront wavefront/wavefron
 
 . Or Follow the Waverfront instructions on the Integrations Tab
 
+. Scale down to save
++
+----
+  eksctl scale nodegroup --cluster twitterbot --name linux-nodes --nodes 0 --nodes-min 0
+----
 
 == Congratulations! You have deployed a twitterbot via EKS with Wavefront monitoring
+
