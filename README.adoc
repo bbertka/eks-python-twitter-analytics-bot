@@ -11,7 +11,7 @@ image:img/twitter-bot.png[]
 
 == Assumptions
 * You already have an AWS account with typical permissions to create EC2 resources, EKS clusters
-* A Twitter application API key
+* A Twitter application API key (https://developer.twitter.com/)
 
 [#requirements]
 = Part 1 - Requirements
