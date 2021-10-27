@@ -137,6 +137,9 @@ $ kubectl apply -f twitter-bot-service.yml
 service/service-twitter-bot created 
 ----
 
+. Add Subnet tags to public subnets in the EKS VPC, ensure each public subnet is tagged as shown.
+image:img/subnet-tags.png[]
+
 . Create the ALB Ingress
 +
 ----
