@@ -196,6 +196,16 @@ After a few minutes, open the browser and connect to your instance on the ALB ad
 [#setup-wavefront]]
 = Part 5 - Wavefront
 
+. Go to Integrations tab and select Kubernetes
+
+image:img/k8s-integration.png[]
+
+. Follow the instructions on how to set up for a standard Kubernetes cluster
+
+image:img/k8s-setup.png[]
+
+. Some instructions here
+
 . Install  Helm
 +
 ----
@@ -237,6 +247,11 @@ deployment.apps/wavefront-proxy   1/1     1            1           5d3h
 NAME                                        DESIRED   CURRENT   READY   AGE
 replicaset.apps/wavefront-proxy-c4fd5f48d   1         1         1       5d3h
 ----
+
+. Great, now you have set up the K8s integration, so easy!
+
+image:img/k8s-integration-list.png[]
+
 
 . Check the dashboards created for your K8s integration
 
