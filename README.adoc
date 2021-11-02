@@ -208,7 +208,7 @@ $brew install helm
 $helm repo add wavefront https://wavefronthq.github.io/helm/ && helm repo update
 ----
 
-. Create a Wavefront namespace and install
+. Create a Wavefront namespace and install using the instructions on your integrations tab in the Wavefront GUI
 +
 ----
 $kubectl create namespace wavefront && helm install wavefront wavefront/wavefront \
@@ -217,7 +217,30 @@ $kubectl create namespace wavefront && helm install wavefront wavefront/wavefron
     --set clusterName="twitterbot" --namespace wavefront
 ----
 
-. Or Follow the Waverfront instructions on the Integrations Tab
+. Check Kubernetes to see what's been deployed by the Wavefront Helm chart
++
+----
+bash-3.2$ kubectl get all --namespace wavefront
+NAME                                  READY   STATUS    RESTARTS   AGE
+pod/wavefront-collector-95stt         1/1     Running   0          165m
+pod/wavefront-proxy-c4fd5f48d-9qgzk   1/1     Running   0          5d2h
+
+NAME                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/wavefront-proxy   ClusterIP   10.100.17.227   <none>        2878/TCP   5d3h
+
+NAME                                 DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+daemonset.apps/wavefront-collector   1         1         1       1            1           <none>          5d3h
+
+NAME                              READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/wavefront-proxy   1/1     1            1           5d3h
+
+NAME                                        DESIRED   CURRENT   READY   AGE
+replicaset.apps/wavefront-proxy-c4fd5f48d   1         1         1       5d3h
+----
+
+. Check the dashboards created for your K8s integration
+
+image:img/wavefront-dashboard.png[]
 
 . Scale down to save
 +
