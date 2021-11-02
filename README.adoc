@@ -265,3 +265,6 @@ image:img/wavefront-dashboard.png[]
 
 == Congratulations! You have deployed a twitterbot via EKS with Wavefront monitoring
 
+== Next Step: Python Wavefront Integration
+
+. https://docs.wavefront.com/python.html
