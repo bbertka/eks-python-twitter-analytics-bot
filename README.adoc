@@ -53,7 +53,7 @@ $ eksctl create cluster \
 ----
 $ kubectl get nodes
 NAME                                           STATUS   ROLES    AGE     VERSION
-ip-192-168-10-182.us-east-2.compute.internal   Ready    <none>   3m46s   v1.17.9-eks-4c6976
+ip-192-168-3-103.us-east-2.compute.internal   Ready    <none>   8m48s   v1.24.13-eks-0a21954
 ----
 
 
