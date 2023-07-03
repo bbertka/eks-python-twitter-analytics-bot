@@ -58,7 +58,7 @@ ip-192-168-10-182.us-east-2.compute.internal   Ready    <none>   3m46s   v1.17.9
 
 
 [#setup-cluster-ingress]
-
+= Part 3 - Setup Cluster Ingress
 . Download the default IAM policy from AWS here: 
 +
 ----
@@ -118,28 +118,6 @@ $ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set clusterName=twitterbot \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller
-----
-
-
-. TODO: Fix this  Add Subnet tags to public subnets in the EKS VPC, ensure each public subnet is tagged as shown.
-image:img/subnet-tags.png[]
-
-. Create the ALB Ingress
-+
-----
-$ kubectl apply -f twitter-bot-ingress.yml
-ingress.extensions/twitter-bot-ingress created
-----
-
-. Obtain the ALB Ingress address
-+
-----
-$ kubectl get ingress
-NAME              CLASS    HOSTS   ADDRESS                                                                 PORTS   AGE
-twitterbot-ingress   <none>   *       58c8349a-default-twitterbotin-89de-245843308.us-east-2.elb.amazonaws.com   80      3d1h
-
-For issues with Loadbalancer creation, please verify proper tags are set on your VPC subnets:
-Please see https://aws.amazon.com/premiumsupport/knowledge-center/eks-vpc-subnet-discovery/
 ----
 
 
