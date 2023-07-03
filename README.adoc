@@ -127,7 +127,7 @@ $ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 . Deploy Twitter Bot (make sure to update your env vars)
 +
 ----
-$ kubectl apply -f twitter-bot-deployment.yaml
+$ kubectl apply -f twitterbot-deployment.yml
 ----
 
 . If all goes well you should see output as such:

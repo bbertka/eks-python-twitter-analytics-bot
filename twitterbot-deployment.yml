@@ -1,0 +1,85 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: twitterbot
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: twitterbot
+  name: deployment-twitterbot
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: app-twitterbot
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: app-twitterbot
+    spec:
+      containers:
+      - image: bbertka/twittter-analytics-bot
+        imagePullPolicy: Always
+        name: twitter-analytics-bot
+        ports:
+        - containerPort: 8080
+        env:
+        - name: APP_KEY
+          value: "CHANGE_ME"
+        - name: APP_SECRET
+          value: "CHANGE_ME"
+        - name: OAUTH_TOKEN
+          value: "CHANGE_ME"
+        - name: OAUTH_TOKEN_SECRET
+          value: "CHANGE_ME"
+        - name: MAX_CHART_SIZE
+          value: "5000"
+        - name: PROBABLE_RETWEET
+          value: "0"
+        - name: PROBABLE_FOLLOW
+          value: "0"
+        - name: PROBABLE_FAVORITE
+          value: "0"
+        - name: PROBABLE_DO_NOTHING
+          value: "100"
+        - name: PORT
+          value: "8080"
+        - name: INCLUDE_TWITTER_HASH
+          value: "bigdata"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: twitterbot
+  name: service-twitterbot
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: app-twitterbot
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: twitterbot
+  name: ingress-twitterbot
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: service-twitterbot
+              port:
+                number: 80
