@@ -133,26 +133,27 @@ $ kubectl apply -f twitterbot-deployment.yml
 . If all goes well you should see output as such:
 +
 ----
-bash-3.2$ kubectl get all
-NAME                                          READY   STATUS    RESTARTS   AGE
-pod/alb-ingress-controller-78cf8c58fb-7ltdw   1/1     Running   0          25m
-pod/twitterbot-7bdffc4f95-9nxnn               1/1     Running   0          6m58s
+$ kubectl get all -n twitterbot
+NAME                                         READY   STATUS    RESTARTS   AGE
+pod/deployment-twitterbot-654f798dfc-75xbc   1/1     Running   0          9m7s
 
-NAME                          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
-service/kubernetes            ClusterIP   10.100.0.1       <none>        443/TCP        4h13m
-service/service-twitter-bot   NodePort    10.100.173.113   <none>        80:30025/TCP   24m
+NAME                         TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+service/service-twitterbot   NodePort   10.100.38.140   <none>        80:30553/TCP   20m
 
-NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/alb-ingress-controller   1/1     1            1           26m
-deployment.apps/twitterbot               1/1     1            1           6m58s
+NAME                                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/deployment-twitterbot   1/1     1            1           20m
 
-NAME                                                DESIRED   CURRENT   READY   AGE
-replicaset.apps/alb-ingress-controller-78cf8c58fb   1         1         1       25m
-replicaset.apps/alb-ingress-controller-b978db5c9    0         0         0       26m
-replicaset.apps/twitterbot-7bdffc4f95               1         1         1       6m59s
+NAME                                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/deployment-twitterbot-654f798dfc   1         1         1       9m7s
 ----
 
-After a few minutes, open the browser and connect to your instance on the ALB address
+. After a few minutes, open the browser and connect to your instance on the ALB address
++
+----
+$ kubectl get ingress/ingress-twitterbot -n twitterbot
+NAME                 CLASS   HOSTS   ADDRESS                                                                  PORTS   AGE
+ingress-twitterbot   alb     *       k8s-twitterb-ingresst-6193133415-573816508.us-east-2.elb.amazonaws.com   80      22m
+----
 
 
 [#setup-wavefront]]
