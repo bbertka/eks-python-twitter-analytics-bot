@@ -20,7 +20,7 @@ spec:
         app.kubernetes.io/name: app-twitterbot
     spec:
       containers:
-      - image: bbertka/twittter-analytics-bot
+      - image: bbertka/twitter-analytics-bot:latest
         imagePullPolicy: Always
         name: twitter-analytics-bot
         ports:
