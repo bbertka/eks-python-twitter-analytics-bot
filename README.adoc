@@ -4,6 +4,8 @@ image:img/twitter-bot.png[]
 
 == About
 
+*Update* Need to refactor fro K8s changes
+
 * link:#part-1---requirements[Part 1 - Requirements]
 * link:#part-2---deploy-eks-cluster[Part 2 - Deploy EKS Cluster]
 * link:#part-3---setup-cluster-ingress[Part 3 - Setup Cluster Ingress]
