@@ -58,10 +58,34 @@ ip-192-168-10-182.us-east-2.compute.internal   Ready    <none>   3m46s   v1.17.9
 
 
 [#setup-cluster-ingress]
-= Part 3 - Setup Cluster Ingress
-To have access to the bot dashboard via the browser, we need to load balance to the running container within Kubernetes. To do this we create an Application Load Balancer.  Fortunetly, AWS provides an ALB controller to make this easy for us which integrates nicely with EKS.
 
-. Create an IAM OIDC provider and associate it with your cluster
+. Download the default IAM policy from AWS here: 
++
+----
+$ curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.7/docs/install/iam_policy.json
+----
+
+. Create the IAM policy
++
+----
+$ aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json
+{
+    "Policy": {
+        "PolicyName": "AWSLoadBalancerControllerIAMPolicy",
+        "PolicyId": "XXXXXXXXXXXXXXXXXXXXXX",
+        "Arn": "arn:aws:iam::XXXXXXXXXXXXX:policy/AWSLoadBalancerControllerIAMPolicy",
+        "Path": "/",
+        "DefaultVersionId": "v1",
+        "AttachmentCount": 0,
+        "PermissionsBoundaryUsageCount": 0,
+        "IsAttachable": true,
+        "CreateDate": "2023-06-30T19:20:37+00:00",
+        "UpdateDate": "2023-06-30T19:20:37+00:00"
+    }
+}
+----
+
+. Associating IAM OIDC provider
 +
 ----
 $ eksctl utils associate-iam-oidc-provider \
@@ -70,76 +94,34 @@ $ eksctl utils associate-iam-oidc-provider \
     --approve
 ----
 
-. Download an IAM policy for the ALB Ingress Controller pod that allows it to make calls to AWS APIs on your behalf
+. Create IAM service account
 +
 ----
-curl -o iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.8/docs/examples/iam-policy.json
+$ eksctl create iamserviceaccount \
+  --cluster=twitterbot \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --role-name AmazonEKSLoadBalancerControllerRole \
+  --attach-policy-arn=arn:aws:iam::XXXXXXXXXXXX:policy/AWSLoadBalancerControllerIAMPolicy \
+  --approve
 ----
 
-. Create an IAM policy called ALBIngressControllerIAMPolicy using the policy downloaded in the previous step.  Take note of the ARN policy string that was created for a following step.
+. Add the eks-charts Helm repo and install the AWS load balancer controller
 +
 ----
-$ aws iam create-policy \
-    --policy-name ALBIngressControllerIAMPolicy \
-    --policy-document file://iam-policy.json
+$ helm repo add eks https://aws.github.io/eks-charts
+
+$ helm repo update eks
+
+$ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=twitterbot \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller
 ----
 
-. Create a Kubernetes service account named alb-ingress-controller in the default namespace, a cluster role, and a cluster role binding for the ALB Ingress Controller to use with the following command
-+
-----
-kubectl apply -f rbac-role.yml
-----
 
-. Create an IAM role for the ALB Ingress Controller and attach the role to the service account created in the previous step. The command that follows only works for clusters that were created with eksctl.  Note use your ARN from the previous step.
-+
-----
-eksctl create iamserviceaccount \
-    --region us-east-2 \
-    --name alb-ingress-controller \
-    --namespace default \
-    --cluster twitterbot \
-    --attach-policy-arn arn:aws:iam::370534301218:policy/ALBIngressControllerIAMPolicy \
-    --override-existing-serviceaccounts \
-    --approve
-----
-
-. Deploy your ALB Controller, note that initially it will error until the subsequent steps
-+
-----
-$ kubectl apply -f alb-ingress.yml
-----
-
-. Edit the ALB Deployment with your cluster name, your EKS VPC, and region
-+
-----
-kubectl edit deployment.apps/alb-ingress-controller
-
-...
-    spec:
-      containers:
-      - args:
-        - --ingress-class=alb
-        - --cluster-name=twitterbot
-        - --aws-vpc-id=vpc-0dab680d6770192eb
-        - --aws-region=us-east-2
-----
-
-. Confirm that the ALB Ingress Controller is running with the following command.
-+
-----
-$ kubectl get pods
-NAME                                      READY   STATUS    RESTARTS   AGE
-alb-ingress-controller-646d767ccf-4h624   1/1     Running   0          12s
-----
-
-. Create the Twitter Bot Service
-+
-----
-$ kubectl apply -f twitter-bot-service.yml
-service/service-twitter-bot created 
-----
-
-. Add Subnet tags to public subnets in the EKS VPC, ensure each public subnet is tagged as shown.
+. TODO: Fix this  Add Subnet tags to public subnets in the EKS VPC, ensure each public subnet is tagged as shown.
 image:img/subnet-tags.png[]
 
 . Create the ALB Ingress
